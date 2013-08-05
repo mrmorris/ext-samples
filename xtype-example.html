@@ -1,0 +1,110 @@
+<html>
+<head>
+   <title>Ext.Element</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+         var panel1 = {
+            xtype : 'panel', // has explicit xtype, uses Ext.Panel
+            title : 'Plain Panel',
+            html  : 'Panel with an xtype specified'
+         };
+
+         var panel2 = {
+            title : 'Plain Panel 2',
+            html  : 'Panel with <b>no</b> xtype specified'
+         };
+
+         new Ext.Window({
+            width        : 200,
+            height       : 150,
+            title        : 'Accordion window',
+            layout       : 'accordion',
+            border       : false,
+            layoutConfig : {
+               animate : true
+            },
+            items : [
+               panel1,
+               panel2 
+            ]
+         }).show();
+
+         // cleaner code.. you can define all XType items inline
+         /*
+         new Ext.Window({
+            width        : 200,
+            height       : 150,
+            title        : 'Accordion window',
+            layout       : 'accordion',
+            border       : false,
+            layoutConfig : {
+               animate : true
+            },
+            items : [
+               {
+                  xtype : 'panel', // has explicit xtype, uses Ext.Panel
+                  title : 'Plain Panel',
+                  html  : 'Panel with an xtype specified'
+               },
+               {
+                  title : 'Plain Panel 2',
+                  html  : 'Panel with <b>no</b> xtype specified'
+               } 
+            ]
+         }).show();
+         */
+
+         // Example of immediately initating a Component rendering
+         var myPanel = new Ext.Panel({
+             renderTo : document.body,
+             height   : 50,
+             width    : 150,
+             title    : 'Lazy rendered Panel',
+             frame    : true
+         });
+
+         // Example of deferred Component rendering
+         var myPanel = new Ext.Panel({
+             height   : 50,
+             width    : 150,
+             title    : 'Deferred rendered Panel',
+             frame    : true
+         });
+
+         myPanel.render('container');
+
+         // however... NEVER renderTo/applyTo/manually render a Component
+         // that is a child of another Component... this has a parent-child
+         // relationship (called Container model) and the parent
+         // will manage the rendering
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

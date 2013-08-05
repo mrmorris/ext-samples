@@ -1,0 +1,200 @@
+<html>
+<head>
+   <title>Form Basics</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+
+      .combo-result-item {
+         padding:  2px;
+         border:   1px solid #FFFFFF;
+      }
+      .combo-name {
+         font-weight:      bold;
+         font-size:        11px;
+         background-color: #FFFF99;
+      }
+      .combo-full-address {
+         font-size:  11px;
+          color:      #666666;
+       }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+   <script src="extjs/ext-all-debug.js"></script>
+   <script>
+
+      if (Ext.BLANK_IMAGE_URL.substr(0, 5) != 'data:') {
+      	Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+      }
+
+      // set up a new validation type "vtype"
+      Ext.apply(Ext.form.VTypes, {
+
+         nameVal: /^[A-Z][A-Za-z]+\s[A-Z][A-Za-z]+$/,
+         nameMask: /[A-Za-z ]/,
+         nameText: "Invalid Name",
+         // this is the function that tests the field value
+         name: function(v) {
+            return this.nameVal.test(v);
+         }
+
+      });
+
+      // could also just use ArrayStore
+      var genres = new Ext.data.SimpleStore({
+         fields: ['id', 'genre_name'],
+         data : [
+            ['0','New Genre'],
+            ['1','Comedy'],
+            ['2','Drama'],
+            ['3','Action']
+         ]
+      });
+
+      // enable this to show error message on hover
+      //Ext.QuickTips.init();
+
+      Ext.onReady(function(){
+
+         // now lets set up our FormPanel
+         // render it to the document body
+         var movie_form = new Ext.FormPanel({
+            url: 'movie-form-submit.php',
+            renderTo: Ext.getBody(),
+            frame: true,
+            title: 'Movie Information Form',
+            width: 400,
+            height: 400,
+            labelWidth: 126,
+            defaultType: 'textfield',
+            defaults: {
+               msgTarget: 'side', // validation messages
+               anchor: '-20'
+            },
+            items: [
+               {
+                  xtype: 'textfield',
+                  fieldLabel: 'Title',
+                  name: 'title',
+                  allowEmpty: false
+                },
+                {
+                  xtype: 'textfield',
+                  fieldLabel: 'Director',
+                  name: 'director',
+                  vtype: 'name'
+                },
+                {
+                  xtype: 'datefield',
+                  fieldLabel: 'Released',
+                  name: 'released'
+                },
+                {
+                  xtype: 'combo',
+                  name: 'genre',
+                  fieldLabel: 'Genre',
+                  mode: 'local', 
+                  store: genres,
+                  displayField:'genre_name',
+                  typeAhead: true,
+                  width: 130,
+                  listeners: {
+                        // passed a form field, 
+                        // the data record of the selected item
+                        // and the index number of the item that was clicked
+                     select: function(field, rec, selIndex){
+                        if (selIndex == 0){
+                           Ext.Msg.prompt('New Genre', 'Name', Ext.emptyFn);
+                        }
+                     }
+                  }
+               }
+            ]
+         });
+
+         movie_form.add(remoteComboFieldConfig);
+
+         movie_form.doLayout();
+         
+      });
+
+      // example remote store
+      var remoteJsonStore = new Ext.data.JsonStore({
+         // root key of the response to use as the store data
+         root: 'records',
+         // base params in the request, resource will query on this column
+         baseParams: {
+            column: 'fullName'
+         },
+         fields: [
+            {
+               name: 'name',
+               // mapping translates inbound "fullName" property to "name"
+               mapping: 'fullName'
+            },
+            {
+               name: 'city',
+               mapping: 'city'
+            },
+            {
+               name: 'id',
+               mapping: 'id'
+            }
+         ],
+         // "proxy" is the resource you are requesting from
+         // "script tag" because not same origin
+         proxy: new Ext.data.ScriptTagProxy({
+            url : 'http://extjsinaction.com/dataQuery.php'
+            //url: '/dataQuery.json'
+         }),
+         // property returned that informs of total
+         totalProperty: 'totalCount',
+
+      });
+
+      // combobox using remote store
+      var remoteComboFieldConfig = {
+         xtype: 'combo',
+         fieldLabel: 'Search by name',
+         forceSelection: true,
+         displayField: 'name',
+         // valueField will be used for submission
+         valueField: 'id',
+         // because you're showing the name but submitting the id
+         // you need a hidden field to store the valueField
+         // specifying its name gives you more control over that field
+         hiddenName: 'customerId',
+         loadingText: 'Querying...',
+         // minimum num of chars before store is queried
+         minChars: 1,
+         // triggerAction all tells the Store to query for all the data
+         triggerAction: 'all',
+         pageSize: 20,
+         store: remoteJsonStore,
+         // can optionall template this
+         /*
+         tpl: new Ext.XTemplate(
+            '<tpl for="."><div class="combo-result-item">',
+               '<div class="combo-name">{name}</div>',
+               '<div class="combo-full-address">{city} {state} {zip}</div>',
+            '</div></tpl>'
+         ),
+         itemSelector: 'div.combo-result-item'
+         */
+      };
+   </script>
+</head>
+<body>
+   <!-- Nothing in the body -->
+</body>
+</html>

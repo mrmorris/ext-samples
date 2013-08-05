@@ -1,0 +1,94 @@
+<html>
+<head>
+   <title>Ext.Element</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+         var win;
+
+         var newWindow = function(btn) {
+
+            if (!win) {
+               win = new Ext.Window({
+                  animateTarget: btn.el,
+                  html: 'My first plain Window',
+                  closeAction: 'hide',
+                  id: 'myWin',
+                  height: 200,
+                  width: 300,
+                  constrain: true
+               });
+            }
+
+            win.show();
+
+         };
+
+         new Ext.Button({
+            renderTo: Ext.getBody(),
+            text: "Open my Window",
+            style: 'margin:100px;',
+            handler: newWindow
+         });
+
+         // rigid modal window example
+         /*
+         var secondWindow = new Ext.Window({
+            height      : 75,
+            width : 200,
+            modal : true, // masks the page
+            title : 'This is one rigid window',
+            html : 'Try to move or resize me. I dare you.', plain : true,
+            plain: true, // set content body bg transparent
+            border : false,
+            resizable : false,
+            draggable : false,
+            closable : false,
+            buttonAlign : 'center',
+            
+            //resizable: true,
+            //minWidth: 500,
+            //minHeight: 500
+
+            buttons : [
+               {
+                  text: 'I give up!',
+                  handler: function() {
+                     secondWindow.close();
+                  }
+               } 
+            ]
+         });
+
+         secondWindow.show();
+         */
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

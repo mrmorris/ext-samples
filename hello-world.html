@@ -1,0 +1,67 @@
+<html>
+<head>
+   <title>Hello World</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      /* or.. if we want to get fancy
+      if (Ext.BLANK_IMAGE_URL.substr(0, 5) != 'data:') {
+         Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+      }*/
+
+      // "run" your application with Ext.onReady()
+      Ext.onReady(function () {
+
+          Ext.Msg.alert('hi', 'hello world example');
+
+          /* Message with config
+          Ext.Msg.show({
+              title: 'Milton',
+              msg: 'Have you seen my stapler?',
+              buttons: {
+                  yes: true, // can also pass strings.. "Maybe" or constant Ext.Msg.YESNO
+                  no: true,
+                  cancel: true
+              },
+              icon: 'milton-icon', // adds a class
+              fn: function (btn) {
+                  Ext.Msg.alert('You clicked', btn); // btn is the button value
+              }
+
+          });
+          */
+
+          /* Loading a window
+          var win = new Ext.Window({
+               id       : 'myWindow', // registered with ComponentManager
+               title    : 'My first Ext JS  Window',
+               width    : 300,
+               height   : 150,
+               layout   : 'fit',
+               autoLoad : {
+                  url     : 'nonexistent.html', // already jumping into ajax!
+                  scripts : true
+               }
+          });
+
+          win.show();
+          */
+
+          
+
+      });
+
+   </script>
+</head>
+<body>
+   <!-- Nothing in the body -->
+</body>
+</html>

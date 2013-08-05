@@ -1,0 +1,305 @@
+<html>
+<head>
+   <title>Form Advanced</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+
+      .combo-result-item {
+         padding:  2px;
+         border:   1px solid #FFFFFF;
+      }
+      .combo-name {
+         font-weight:      bold;
+         font-size:        11px;
+         background-color: #FFFF99;
+      }
+      .combo-full-address {
+         font-size:  11px;
+          color:      #666666;
+       }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+   <script src="extjs/ext-all-debug.js"></script>
+   <script>
+
+      if (Ext.BLANK_IMAGE_URL.substr(0, 5) != 'data:') {
+      	Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+      }
+
+      // enable this to show error message on hover
+      //Ext.QuickTips.init();
+
+      Ext.onReady(function(){
+
+         var fieldset1 = {
+            xtype       : 'fieldset',
+            title       : 'Name',
+            flex        : 1,
+            border      : false,
+            labelWidth  : 60,
+            defaultType : 'field',
+            defaults    : {
+               anchor     : '-10',
+               allowBlank : false
+            },
+            items : [ 
+               {
+                  fieldLabel : 'First',
+                  name       : 'firstName'
+               },
+               {
+                  fieldLabel : 'Middle',
+                  name       : 'middle'
+               }, {
+                  fieldLabel: 'Last',
+                  name       : 'firstName'
+               }
+            ] 
+         };
+
+         // here we are applying fieldset1 to some configs into a new object
+         // using it as default options
+         var fieldset2 = Ext.apply({}, {
+            flex :1,
+            title : 'Address Information', 
+            items :[
+               {
+                  fieldLabel : 'Address',
+                  name       : 'address'
+               }, 
+               {
+                  fieldLabel: 'Street',
+                  name       : 'street'
+               },
+               {
+                  xtype : 'container', 
+                  border : false, 
+                  layout : 'column', 
+                  anchor : '100%', 
+                  items :[
+                     {
+                        xtype  : 'container',
+                        layout : 'form',
+                        width  : 200,
+                        items  : [
+                           {
+                              xtype : 'textfield',
+                              fieldLabel : 'State',
+                              name : 'state',
+                              anchor : '-20'
+                           }
+                        ]
+                     },
+                     {
+                        xtype: 'container',
+                        layout: 'form',
+                        columnWidth: 1,
+                        labelWidth: 30,
+                        items: [
+                           {
+                              xtype: 'textfield',
+                              fieldLabel: 'Zip',
+                              anchor: '-10',
+                              name: 'Zip'
+                           }
+                        ]
+                     }
+                  ]
+               }
+            ]
+         }, fieldset1);
+
+         var fieldsetContainer = {
+             xtype        : 'container',
+             layout       : 'hbox',
+             height       : 120,
+             layoutConfig : {
+                align : 'stretch'
+             },
+             items  : [
+                fieldset1,
+                fieldset2 
+             ]
+         };
+
+         var tabs = [ 
+            {
+                xtype     : 'container',
+                title     : 'Phone Numbers',
+                layout    : 'form',
+                bodyStyle : 'padding:6px 6px 0',
+                defaults  : {
+                  xtype : 'textfield',
+                  width : 230 
+               },
+               items: [ 
+                  {
+                     fieldLabel : 'Home',
+                     name       : 'home'
+                  },
+                  {
+                     fieldLabel : 'Business',
+                     name       : 'business'
+                  }, 
+                  {
+                     fieldLabel: 'Mobile',
+                     name       : 'mobile'
+                  },
+                  {
+                     fieldLabel : 'Fax',
+                     name: 'fax'
+                  }
+               ]
+            },
+            {
+               title: 'Resume',
+               xtype: 'htmleditor',
+               name: 'resume'
+            },
+            {
+               title: 'Bio',
+               xtype: 'htmleditor',
+               name: 'bio'
+            }
+         ];
+
+         var tabPanel = {
+            xtype: 'tabpanel',
+            activeTab: 0,
+            deferredRender: false,
+            layoutOnTabChange : true,
+            border: false,
+            flex: 1,
+            plain: true,
+            items: tabs
+         };
+
+         var myFormPanel  = new Ext.form.FormPanel({
+            renderTo     : Ext.getBody(),
+            width        : 700,
+            title        : 'Our complex form',
+            height       : 360,
+            frame        : true,
+            id           : 'myFormPanel',
+            layout       : 'vbox',
+            layoutConfig : {
+               align : 'stretch'
+            },
+            items: [
+               fieldsetContainer,
+               tabPanel
+            ],
+            buttons: [
+               {
+                  text: 'Submit',
+                  formBind: true,
+                  handler: function(){
+                     submitHandler(arguments);
+                  }
+               },
+               {
+                  text: 'Reset',
+                  handler: function() {
+                     
+                     myFormPanel.getForm().reset();
+
+                  }
+               }
+            ]
+         });
+
+         // define submission handling
+
+         // create a handler for success or failure of submission
+         // displays an alert MessageBox
+         var onSuccessOrFail = function(form, action) {
+            
+            var formPanel = Ext.getCmp('myFormPanel');
+
+            formPanel.el.unmask();
+
+            var result = action.result;
+
+            if (result.success) {           
+               Ext.MessageBox.alert('Success',action.result.msg);
+            } else {
+               Ext.MessageBox.alert('Failure',action.result.msg);
+            } 
+
+         };
+
+         // create a submission handler
+         // which performs the actual submission
+         // note the "url" can be modified at runtime or defined at the form level
+         var submitHandler = function() {
+
+            console.log("Submitting");
+
+            var formPanel = Ext.getCmp('myFormPanel');
+
+            formPanel.el.mask('Please wait', 'x-mask-loading');
+            
+            formPanel.getForm().submit({
+               url     : 'success.true.txt',
+               success : onSuccessOrFail,
+               failure : onSuccessOrFail
+            }); 
+
+         };
+
+         // server response *should* contain at least a "success" property
+         // and a "msg" property
+            
+         // a example server response
+         // with an errors key, Ext will automatically display
+         // errors based on field name
+         /*{
+            success : false,
+            msg     : 'This is an example error message',
+            errors  : {
+               firstName : 'Cannot contain "!" characters.',
+               lastName  : 'Must not be blank.'
+            }
+         };*/
+
+         // loading data into the form
+         // the data being loaded should have a "success" and "data" property
+         var formPanel = Ext.getCmp('myFormPanel');
+         formPanel.el.mask('Please wait', 'x-mask-loading');
+
+         // this is a standard ajax load method
+         formPanel.getForm().load({
+            url     : 'data.txt', // i set this up manually
+            success : function() {
+               formPanel.el.unmask();
+            }
+         });
+
+         // you could also set the form data via setValues(dataObj)
+         // formPanel.getForm().setValues(dataObj);
+         // or if you have a Record object..
+         // formPanel.loadRecord(recordObj);
+
+         // likewise, getValues() gets the value object
+
+
+         
+      });
+
+   </script>
+</head>
+<body>
+   <!-- Nothing in the body -->
+</body>
+</html>

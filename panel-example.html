@@ -1,0 +1,133 @@
+<html>
+<head>
+   <title>Ext.Element</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+         // set up a basic button handler for later with toolbars
+         // toolbars pass a reference to themselves, which we'll call "btn"
+         // along with the eventObj (which we don't include)
+         var myBtnHandler = function(btn) {
+            Ext.MessageBox.alert('You Clicked', btn.text);
+         }
+
+         var fileBtn =  new Ext.Button({
+            text    : 'File',
+            handler : myBtnHandler
+         });
+
+         var editBtn = new Ext.Button({
+            text    : 'Edit',
+            handler : myBtnHandler
+         });
+
+         // "greedy" toolbar filler.. pushes all items after it to the right
+         var tbFill = new Ext.Toolbar.Fill();
+
+         var myTopToolbar = new Ext.Toolbar({
+            items : [
+               fileBtn, // our file button
+               tbFill, // the "filler"
+               editBtn // our edit button
+            ]
+         });
+
+         var myBottomToolbar = [
+            {
+               text    : 'Save',
+               handler: myBtnHandler
+            },
+            '-',
+            {
+               text: 'Cancel',
+               handler: myBtnHandler
+            },
+            '->',
+            '<b>Items open: 1</b>',
+         ];
+
+         // all items defined, lets define our panel
+
+         /*
+         var myPanel = new Ext.Panel({
+              width       : 200,
+              height      : 150,
+              title       : 'Ext Panels rock!',
+              collapsible : true, // enables the toggle button to collapse itself
+              renderTo    : Ext.getBody(),
+              tbar        : myTopToolbar, // top toolbar 
+              bbar        : myBottomToolbar, // bottom toolbar
+              html        : 'My first Toolbar Panel!'
+         });
+         */
+         
+         // can also fetch references to the toolbars via
+         // myPanel.getTopToolbar();
+         // myPanel.getBottomToolbar();
+
+         // now lets extend and add "Buttons" and "tools"
+
+         var myPanel = new Ext.Panel({
+              width       : 200,
+              height      : 150,
+              title       : 'Ext Panels rock!',
+              collapsible : true, // enables the toggle button to collapse itself
+              renderTo    : Ext.getBody(),
+              tbar        : myTopToolbar, // top toolbar 
+              bbar        : myBottomToolbar, // bottom toolbar
+              html        : 'My first Toolbar Panel!',
+              buttons      : [
+               {
+                  text: 'Press me!',
+                  handler: myBtnHandler
+               }
+               ],
+              tools        : [
+               {
+                  id: 'gear',
+                  handler: function(eventObj, toolElement, panel) {
+                     var toolClassNames = toolEl.dom.className.split(' ');
+                     var toolClass = toolClassNames[1];
+                     var toolId = toolClass.split('-')[2];
+
+                     Ext.MessageBox.alert('You Clicked', 'Tool ' + toolId);
+                  }
+                },
+                {
+                  id: 'help',
+                  handler: function() {
+                     Ext.MessageBox.alert('You Clicked', 'The help tool');
+                  }
+                }
+               ]
+         });
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

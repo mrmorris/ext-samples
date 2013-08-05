@@ -1,0 +1,119 @@
+<html>
+<head>
+   <title>Ext.Element</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+         // myWin _contains_ two panels
+
+         var myWin = new Ext.Window({
+            id:         'myWin',
+            width        : 400,
+            height       : 400,
+            items : [
+               {
+                  id : 'panel1',
+                  title : 'Plain Panel',
+                  html  : 'Panel with an xtype specified',
+                  height: 100,
+                  frame: true
+               },
+               {
+                  id: 'panel2',
+                  title : 'Plain Panel 2',
+                  html  : 'Panel with <b>no</b> xtype specified',
+                  frame: true
+               } 
+            ]
+         });
+
+         // we can access items via myWin.items
+         // this is an instance of Ext.util.MixedCollection
+         myWin.items;
+
+         myWin.show();
+
+          // we can add Components with add() and insert()
+         /*
+         Ext.getCmp('myWin').add({
+              title : 'Appended Panel',
+              id    : 'addedPanel',
+              html  : 'Hello there!'
+         });
+
+         // but since it already rendered we must call "doLayout()"
+         // to force recalc on the Container and its children
+         Ext.getCmp('myWin').doLayout();
+         */
+
+         // can also insert at a specific position
+         // in this case, index 1, under Panel1
+         /*
+         Ext.getCmp('myWin').insert(1, {
+              title : 'Inserted Panel',
+              id    : 'insertedPanel',
+              html  : 'It is cool here!'
+         });
+         Ext.getCmp('myWin').doLayout();
+         */
+
+          // can also remove Components
+         /*
+         var panel = Ext.getCmp('addedPanel'); // the id from above...
+         Ext.getCmp('myWin').remove(panel);
+         */
+
+
+         // or move Components to different containers
+         /*
+         var panel = Ext.getCmp('insertedPanel');
+         Ext.getCmp('myWin').remove(panel, false); // do NOT call "destroy"
+         Ext.getCmp('otherParent').add(panel);
+         Ext.getCmp('otherParent').doLayout();
+         */
+
+         // Querying the Container...
+
+         // get all of a specific XType with findByType()
+         var fields = Ext.getCmp('myWin').findByType('field');
+
+         // more advanced querying with findBy()
+         // expects a custom function to test against
+         // and the scope to use
+         // must return true for matches
+         var panels = Ext.getCmp('myWin').findBy(function(comp) {
+            if (!comp.isVisible()) {
+               return true;
+            }
+         });
+        
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

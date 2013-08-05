@@ -1,0 +1,70 @@
+<html>
+<head>
+   <title>Ext.Element</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+         var myCallback = function(btn, text) {
+
+            console.log('You pressed '  + btn);
+
+            if (text) {
+               console.log('You entered : ' + text)
+            }
+
+         }
+
+         var msg   = 'Your document was saved successfully';
+         var title = 'Save status:';
+
+         Ext.MessageBox.alert(title, msg);
+         //Ext.MessageBox.prompt(title, msg, myCallback);
+
+         Ext.Msg.show({
+            title      : 'Input required:',
+            msg        : 'Please tell us a little about yourself',
+            width      : 300,
+            buttons    : Ext.MessageBox.OKCANCEL, // or YESNOCANCEL
+            multiline  : true, // multiline textarea input
+            fn         : myCallback,
+            icon       : Ext.MessageBox.INFO // or ERROR
+         });
+
+         // buttons option can also be an object.
+         {
+            yes: true,
+            cancel: true
+         };
+
+         // animated wait MessageBox
+         Ext.MessageBox.wait("We're doing something...", 'Hold on...');
+         
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

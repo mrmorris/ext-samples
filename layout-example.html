@@ -1,0 +1,421 @@
+<html>
+<head>
+   <title>Ext.Element</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+         // ContainerLayout Example
+
+         var childPnl1 = {
+            frame  : true,
+            height : 50,
+            html   : 'My First Child Panel',
+            title  : 'First children are fun'
+         };
+
+         var childPnl2 = {
+            width  : 150,
+            html   : 'Second child',
+            title  : 'Second children have all the fun!'
+         };
+
+         var myWin = new Ext.Window({
+            height     : 300,
+            width      : 300,
+            title      : 'A window with a container layout',
+            autoScroll: true, // overflow-x & overflow-y are now auto
+            items: [
+               childPnl1,
+               childPnl2
+            ],
+            bbar: [
+               {
+                  text: 'Add child',
+                  handler: function(btn) {
+
+                     var numItems = myWin.items.getCount() + 1;
+
+                      myWin.add({
+                         title       : 'Child number ' + numItems,
+                         height      : 60,
+                         frame       : true,
+                         collapsible : true,
+                         collapsed   : true,
+                         html        : 'Yay, another child!'
+                      });
+
+                      myWin.doLayout();
+                   
+                  }
+               }
+            ]
+         });
+
+         myWin.show();
+
+
+         // AnchorLayout example
+
+         myWin.destroy();
+
+         var myWin = new Ext.Window({
+
+            height: 300,
+            width: 300,
+            layout: 'anchor',
+            border: false,
+            anchorSize: '400',
+            items: [
+               {
+                  title: 'Panel1',
+                  anchor: '100%, 25%', // full width, 25% of parents height
+                  frame: true
+               },
+               {
+                  title: 'Panel2',
+                  anchor: '0, 50%', // full width, 50% height
+                  frame: true
+               },
+               {
+                  title: 'Panel3',
+                  anchor: '50%, 25%', // 50% width, 25% height
+                  frame: true
+               }
+            ]
+             
+            // offsets
+            //items : [ {
+            //   title     : 'Panel1',
+            //   anchor    : '-50, -150',
+            //   frame     : true
+            //}, {
+            //   title     : 'Panel2',
+            //   width    : '150',
+            //   anchor    : '-10',
+            //   frame     : true
+            //} ]
+
+         });
+
+         myWin.show();
+
+         // FormLayout
+
+         myWin.destroy();
+
+         // defaultType specifies default xtype of items
+         // fieldLabel specifies the label content
+         // optional labelSeparator
+         var myWin = new Ext.Window({
+            height      : 240,
+            width       : 200,
+            bodyStyle   : 'padding: 5px',
+            layout      : 'form',
+            labelWidth  : 50,
+            defaultType : 'textfield', 
+            items :[
+                {
+                   fieldLabel : 'Name',
+                   width      : 110,
+                   //anchor: '-4' can use anchor to get it to size with parent
+                },
+                {
+                  fieldLabel: 'Age',
+                  width: 25
+                },
+                {
+                  xtype: 'combo',
+                  fieldLabel: 'Location',
+                  width: 120,
+                  store: ['Here', 'There', 'Anywhere']
+                },
+                {
+                  xtype: 'textarea',
+                  fieldLabel: 'Bio'
+                },
+                {
+                  xtype: 'panel',
+                  fieldLabel     : '',
+                  labelSeparator : '',
+                  frame          : true,
+                  title          : 'Instructions',
+                  html           : 'Please fill in the form',
+                  height         : 55
+                }
+            ]
+         });
+
+         myWin.show();
+
+         // AccordionLayout Example
+
+         myWin.destroy();
+
+         // layoutConfig: some Layout schemes have additional configs 
+         var myWin = new Ext.Window({
+            height       : 200,
+            width        : 300,
+            border       : false,
+            title        : 'A Window with an accordion layout',
+            layout       : 'accordion',
+            layoutConfig: {
+               animate: true
+            },
+            items: [
+               {
+                  xtype:      'form',
+                  bodyStyle   : 'padding: 5px',
+                  title: 'General info',
+                  labelWidth  : 50,
+                  defaultType : 'textfield', 
+                  items :[
+                      {
+                         fieldLabel : 'Name',
+                         anchor: '-10'
+                      },
+                      {
+                        xtype: 'numberfield',
+                        fieldLabel: 'Age',
+                        width: 25
+                      },
+                      {
+                        xtype: 'combo',
+                        fieldLabel: 'Location',
+                        anchor: '-10',
+                        store: ['Here', 'There', 'Anywhere']
+                      }
+                  ]
+               }, 
+               {
+                  xtype  : 'panel',
+                  title  : 'Bio',
+                  layout : 'fit',
+                  items  : {
+                     xtype : 'textarea',
+                     value  : 'Tell us about yourself'
+                  }
+
+               },
+               {
+                  title : 'Instructions',
+                  html  : 'Please enter information.',
+                  tools : [
+                     {id : 'gear'}, 
+                     {id:'help'}
+                  ]
+               }
+            ]
+         });
+
+         myWin.show();
+
+         // CardLayout
+
+         myWin.destroy();
+
+         // custom card flipping control
+         var handleNav = function(btn) {
+
+            var activeItem = myWin.layout.activeItem;
+            var index  = myWin.items.indexOf(activeItem);
+            var numItems = myWin.items.getCount();
+            var indicatorEl  = Ext.getCmp('indicator').el;
+                 
+             if (btn.text == 'Forward' && index < numItems - 1) {
+                 index++;
+                 myWin.layout.setActiveItem(index);
+                 index++;
+                 indicatorEl.update(index + ' of ' + numItems);
+             }
+             else if (btn.text == 'Back' && index > 0) {
+                 myWin.layout.setActiveItem(index - 1);
+                 indicatorEl.update(index + ' of ' + numItems);
+             }
+         };
+
+         var myWin = new Ext.Window({
+            height: 200,
+            width: 300,
+            border: false,
+            title: 'Card Layout',
+            layout: 'card',
+            activeItem: 0,
+            defaults: {border: false},
+            items: [
+               {
+                  xtype:      'form',
+                  bodyStyle   : 'padding: 5px',
+                  title: 'General info',
+                  labelWidth  : 50,
+                  defaultType : 'textfield', 
+                  items :[
+                      {
+                         fieldLabel : 'Name',
+                         anchor: '-10'
+                      },
+                      {
+                        xtype: 'numberfield',
+                        fieldLabel: 'Age',
+                        width: 25
+                      },
+                      {
+                        xtype: 'combo',
+                        fieldLabel: 'Location',
+                        anchor: '-10',
+                        store: ['Here', 'There', 'Anywhere']
+                      }
+                  ]
+               }, 
+               {
+                  xtype  : 'panel',
+                  autoEl: {},
+                  title  : 'Bio',
+                  layout : 'fit',
+                  items  : {
+                     xtype : 'textarea',
+                     value  : 'Tell us about yourself'
+                  }
+               },
+               {
+                  title : 'Congratulations!',
+                  html  : 'You are... done.'                  
+               }
+            ],
+            bbar : [ 
+               {
+                  text    : 'Back',
+                  handler : handleNav
+               } ,'-',
+               {
+                  text    : 'Forward',
+                  handler : handleNav
+               } ,'->', 
+               {
+                  xtype  : 'box',
+                  id     : 'indicator',
+                  style  : 'margin-right: 5px',
+                  autoEl :  {
+                     tag : 'div',
+                     html : '1 of 3'
+                  }
+               } 
+            ]
+         });
+
+         myWin.show();
+
+         // HBox/VBox Example
+
+         myWin.destroy();
+
+         var myWin = new Ext.Window({
+             layout       : 'hbox',
+             height       : 300,
+             width        : 300,
+             title        : 'A Container with an HBox layout',
+             layoutConfig : {
+               pack : 'start',
+               align: 'stretch'
+            },
+            defaults : {
+               frame : true,
+            },
+            items : [ 
+               // could also set height/width manually
+               // or use flex, as we do here
+               // flex is like a weighting on the width for hbox
+               {
+                   title  : 'Panel 1',                  
+                   flex: 1
+                },
+                {
+                   title  : 'Panel 2',                   
+                   flex: 1
+               }, 
+               {
+                  title: 'Panel 3',                  
+                  flex: 2
+               }
+            ] 
+         }).show();
+
+         // BorderLayout Example
+
+         myWin.destroy();
+
+         new Ext.Viewport({
+             layout   : 'border',
+             defaults : {
+               frame : true,
+               split  : true
+             },
+             items: [
+               {
+                  title: 'North Panel',
+                  region: 'north',
+                  height: 100,
+                  minHeight: 100,
+                  maxHeight: 150,
+                  collapsible: true
+               },
+               {
+                  title : 'South Panel',
+                  region : 'south',
+                  height : 75,
+                  split : false,
+                  // fake a "split" look and feel
+                  margins : {
+                   top : 5 
+                  }
+               },
+               {
+                  title : 'East Panel',
+                  region : 'east',
+                  width: 100,
+                  minWidth : 75,
+                  maxWidth: 150,
+                  collapsible: true
+               },
+               {
+                  title: 'West Panel',
+                  region: 'west',
+                  collapsible: true,
+                  collapseMode: 'mini'
+               },
+               {
+                  title: 'Center Panel',
+                  region: 'center',
+                  html: 'Welcome to my Border Layout'
+               }
+             ]
+         });
+
+      }); // end onReady
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

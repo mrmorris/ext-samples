@@ -1,0 +1,58 @@
+<html>
+<head>
+   <title>Ext.Element</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+         // example Viewport initialization
+         // takes up full browser viewport and displays three panels
+         // using the "border" layout
+         new Ext.Viewport({
+            layout : 'border',
+            items : [
+               {
+                  height : 75,
+                  region : 'north',
+                  title  : 'Does Santa live here?'
+               }, 
+               {
+                  width  : 150,
+                  region : 'west',
+                  title  : 'The west region rules'
+               }, 
+               {
+                  region: 'center',
+                  title  : 'No, this region rules!'
+               }
+            ]
+         });
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

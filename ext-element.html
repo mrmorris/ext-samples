@@ -1,0 +1,53 @@
+<html>
+<head>
+   <title>Ext.Element</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+         // fetches the DOM node
+         var containerDiv = document.getElementById('container');
+
+         // fetches an Ext.Element for this node
+         var containerDiv = Ext.get('container');
+
+         // can set height/width
+         containerDiv.setHeight(200);
+
+         containerDiv.setWidth(200);
+
+         containerDiv.setSize(600, 600, {
+            duration: 1,
+            easing: 'bounceOut'
+         });
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container">
+         <p>I am a container</p>
+   </div>
+</body>
+</html>
