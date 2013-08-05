@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message success="true">
+<data>
+	<person>
+	    <name>
+	        <first>Jack</first>
+	        <last>Slocum</last>
+	    </name>
+	    <company>Ext JS</company>
+	    <email>support@extjs.com</email>
+	    <state>OH</state>
+	    <dob>04/15/2007</dob>
+	</person>
+
+	<person>
+	    <name>
+	        <first>Ryan</first>
+	        <last>Morris</last>
+	    </name>
+	    <company>Ext JS</company>
+	    <email>smr.morris@gmail.com</email>
+	    <state>NY</state>
+	    <dob>05/29/1981</dob>
+	</person>
+</data>
+</message>

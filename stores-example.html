@@ -1,0 +1,77 @@
+<html>
+<head>
+   <title>Stores</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      // Create an end-to-end Store (ArrayStore)
+
+      // our sample data
+      // an array of arrays - the format for ArrayReader
+      var arrayData = [
+         ['Ryan Morris', 'NY'],
+         ['Tim Lot', 'MD'],
+         ['Steve Shanigan', 'WA']
+      ];
+
+      // create a new Record Constructor "myRecord"
+      // not the same as "new Record"
+      var myRecord = Ext.data.Record.create([
+         {
+            name: 'name',
+            mapping: 1
+         },
+         {
+            name: 'state',
+            mapping: 2
+         }
+      ]);
+
+      // instantiate an ArrayReader with "myRecord" as a Record template
+      // this takes the Mapping configuration from above
+      // the reader will make a new instance of "myRecord" for each Record in the data
+      var arrayReader = new Ext.data.ArrayReader({}, myRecord);
+
+      var memoryProxy = new Ext.data.MemoryProxy(arrayData);
+
+      var myStore = new Ext.data.Store({
+         reader: arrayReader,
+         proxy: memoryProxy
+      });
+
+      // the above is equivalent to:
+      var myStore = new Ext.data.ArrayStore({
+         data: arrayData,
+         fields: ['name', 'state']
+      });
+
+      Ext.onReady(function () {
+        
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>
