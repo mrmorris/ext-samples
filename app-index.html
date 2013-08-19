@@ -1,0 +1,84 @@
+<html>
+<head>
+   <title>App Index</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+
+   </style>
+
+   <style type="text/css">
+
+       .emplWrap {
+           border: 1px #999999 solid;
+           margin : 3px;
+           -moz-border-radius: 5px;
+           -webkit-border-radius: 5px;
+           background-color: #ffffcc;
+           padding-bottom: 3px;
+      }
+       .emplSelected {
+           border: 1px #66ff66 solid;
+           background-color: #ccffcc;
+           cursor: pointer;
+      }
+       .emplOver {
+           border: 1px #9999ff solid;
+           background-color: #ccccff;
+           cursor: pointer;
+      }
+       .emplName {
+           font-weight: bold;
+           margin-left: 5px;
+           font-size: 14px;
+           text-decoration: underline;
+           color: #333333;
+      }
+       .title {
+           margin-left: 5px;
+           font-weight: bold;
+   } </style>
+
+  <link rel="stylesheet" type="text/css" href="icons/icons.css" />
+
+  <script src="extjs/adapter/ext/ext-base.js"></script>
+
+  <script src="extjs/ext-all-debug.js"></script>
+
+  <script src="book-app/grid/BookGridPanel.js"></script>
+  <script src="book-app/form/FormPanelBaseCls.js"></script>
+  <script src="book-app/form/BookForm.js"></script>
+
+  <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+        Ext.QuickTips.init();
+
+        App.Viewport = new Ext.Viewport({
+          layout: 'fit',
+          height: "100%",
+          items: [{
+              id: 'main-grid',
+              xtype: 'bookgridpanel'   
+          }]
+        });
+
+      });
+
+  </script>
+</head>
+<body>
+</body>
+</html>

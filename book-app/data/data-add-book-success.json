@@ -1,0 +1,11 @@
+{
+   success : true,
+   data : 
+      {
+         id: 50,
+         title: 'New Book',
+         author: 'Tim Leary',
+         pages: 20
+      }
+   
+}
