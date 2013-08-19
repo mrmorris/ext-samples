@@ -1,0 +1,156 @@
+<html>
+<head>
+   <title>Stores</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      // mapping of the fields as we'll get them from the remote source
+      // could also just list off each fieldname (not as a config object) if the name matches...
+      // recordFields = ['id', 'firstname', 'lastname']...
+      var recordFields = [
+         {name: 'id', mapping: 'id'},
+         {name: 'firstname', mapping: 'firstname'},
+         {name: 'lastname', mapping: 'lastname'},
+         {name: 'street', mapping: 'street'},
+         {name: 'city', mapping: 'city'},
+         {name: 'state', mapping: 'state'},
+         {name: 'zip', mapping: 'zip'},
+         {name: 'department', mapping: 'department'}
+      ];
+
+      var remoteJsonStore = new Ext.data.JsonStore({
+         fields        : recordFields, // for field mapping
+         // by specifying the url property, the store will auto-create a Proxy for us
+         // in this case, a ScriptTagProxy.. but it didnt' work
+         //url           : 'http://extjsinaction.com/dataQuery.php',
+         proxy : new Ext.data.ScriptTagProxy( {
+            url : 'http://extjsinaction.com/dataQuery.php'
+         }),
+         totalProperty : 'totalCount', // optional field for the "total" results, for pagination
+         root          : 'records', // important: the property where the data is found
+         id            : 'ourRemoteStore',
+         autoLoad      : false, // tell store NOT to auto-fetch upon initialization
+         remoteSort    : true // tell store NOt to sort locally, due to paginated results
+      });
+
+      // not using an xtype for the store (xtype: jsonstore) because we will later bind it to GridPanel and PagingToolbar...
+
+      // we'll set up some styling functions for later
+      var colorTextBlue = function(id) {
+         return '<span style="color: #0000FF;">' + id + '</span>';
+      };
+
+      // custom renderers are called with 6 arguments... we'll only use the first and third.
+      var stylizeAddress = function(street, column, record) {
+         var city  = record.get('city');
+         var state = record.get('state');
+         var zip   = record.get('zip');
+         return String.format('{0}<br>{1} {2}, {3}', street, city, state, zip );
+      };
+
+      // now for our column model, mapping fields (in the store) to columns
+      // instead of an instance of Ext.grid.ColumnModel however we're just keeping
+      // track of an array of the Column configs to use later..
+      var columnModel = [
+         {
+            header: 'ID',
+            dataIndex : 'id',
+            sortable  : true,
+            width     : 50,
+            resizable : false,
+            hidden    : true,
+            renderer  : colorTextBlue // an example of a custom renderer function
+         },
+         {
+            header    : 'Last Name',
+            dataIndex : 'lastname',
+            sortable  : true,
+            hideable  : false,
+            width: 75
+         },
+         {
+            header : 'First Name', 
+            dataIndex : 'firstname', 
+            sortable : true, 
+            hideable : false,
+            width :75
+         },
+         {
+            header    : 'Address',
+            dataIndex : 'street',
+            sortable  : false,
+            id        : 'addressCol',
+            renderer  : stylizeAddress
+         },
+         {
+            header    : 'Department',
+            dataIndex : 'department',
+            sortable  : true,
+            width     : 150
+         }
+      ];
+
+      // paging toolbar for pagination, as an Xtype config object
+      var pagingToolbar = {
+         xtype       : 'paging',
+         store       : remoteJsonStore,
+         pageSize    : 50, // will use this and the "totalCount" property from server to set up pagination counts
+         displayInfo : true // display current page + total pages
+      };
+
+      // and finally the GridPanel, as an XType config object
+      var grid = {
+         xtype            : 'grid', // GridPanel xtype
+         columns          : columnModel,
+         store            : remoteJsonStore,
+         loadMask         : true, // auto mask when loading and paginating
+         bbar             : pagingToolbar,
+         autoExpandColumn : 'addressCol'
+      };
+
+      Ext.onReady(function () {
+
+         // now a container for our grid!
+         new Ext.Window({
+            height : 350,
+            width  : 550,
+            border : false,
+            layout : 'fit',
+            items  : grid
+         }).show();
+
+         // and we should tell the Store to load up since we disabled auto loading
+         Ext.StoreMgr.get('ourRemoteStore').load({
+            params : {
+               start : 0,
+               limit : 50 
+            }
+         });
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

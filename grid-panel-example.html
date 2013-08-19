@@ -1,0 +1,94 @@
+<html>
+<head>
+   <title>Stores</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      // lets use our ArrayStore
+      var myStore = new Ext.data.ArrayStore({
+         data: [
+            ['Ryan Morris', 'NY'],
+            ['Tim Lot', 'MD'],
+            ['Steve Shanigan', 'WA']
+         ],
+         fields: ['name', 'state']
+      });
+
+      // to set up a GridPanel, we'll need a ColumnModel, GridView and SelectionModel configured
+
+      // the ColumnModel will relate to the data fields
+      // we are configuring what the columns will be and how they map to the Store's data fields
+      var colModel = new Ext.grid.ColumnModel([
+         {
+            header    : 'Full Name',
+            sortable  : true, // enable sorting on this column
+            dataIndex : 'name'
+         }, 
+         {
+            header: 'State',
+            dataIndex : 'state'
+         }
+      ]);
+
+      // GridView will manage each individual row in the grid
+      // responsible for listening for row events and updating the grid when the store updates
+      var gridView = new Ext.grid.GridView();
+
+      // handles selection events on rows
+      // GridView instantiates one by default w/ multi-select, so we are instantiating one with single select to override
+      // alternatively you could use the CellSelectionModel 
+      var selModel = new Ext.grid.RowSelectionModel({
+         singleSelect : true
+      });
+
+      // now set up the GridPanel
+      // note: NEVER pass a layout to GridPanel
+      var grid = new Ext.grid.GridPanel({
+         id: 'myGridPanel',
+         title      : 'Our first grid',
+         //renderTo   : Ext.getBody(),
+         autoHeight : true,
+         width      : 250,
+         // special configs for GridPanel...
+         store      : myStore,
+         view       : gridView,
+         colModel   : colModel,
+         selModel   : selModel
+      });
+
+      Ext.onReady(function () {
+        
+         new Ext.Viewport({
+            layout : 'hbox',
+            items : [
+               grid
+            ]
+         });
+         
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

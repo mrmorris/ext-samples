@@ -1,0 +1,160 @@
+<html>
+<head>
+   <title>Books</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      Ext.onReady(function () {
+
+         // a grid with an "add" button
+         // clicking "add" will trigger a "card" layout in a "window"
+         // each panel of the "card" layout will be a form
+         // each step of the card should validate before moving to the next step
+         // completing the card sequence will submit the data as a whole and add record to grid
+
+         // editing will re-initiate the card flow
+
+         // deleting will simply remove
+
+         // search
+
+         var bookForm = {
+			id: 'book-form',
+			xtype: 'form', // FormPanel
+			layout: 'form', // form layout
+			title : 'Book Form',
+			//html  : 'Panel with <b>no</b> xtype specified',
+			frame: true,
+			items: [
+				{
+					xtype: 'fieldset',
+					defaultType: 'textfield',
+					items: [
+						{
+							fieldLabel: "Title",
+							name: 'title'
+						},
+						{
+							fieldLabel: "Author",
+							name: 'author'
+						}
+					]
+				}
+			],
+			buttons: [
+				{
+					text: 'Submit',
+					formBind: true,
+					handler: function(){
+						
+						console.log("Submitting");
+
+						var formPanel = Ext.getCmp('book-form');
+
+						formPanel.el.mask('Please wait', 'x-mask-loading');
+
+						formPanel.getForm().submit({
+							url     : 'books.php',
+							params: {
+								action: 'submit'
+							},
+							success : function(form, action) {
+
+								var formPanel = Ext.getCmp('book-form');
+
+								formPanel.el.unmask();
+
+								var result = action.result;
+
+								if (result.success) {           
+									Ext.MessageBox.alert('Success',action.result.msg);
+								} else {
+									Ext.MessageBox.alert('Failure',action.result.msg);
+								} 
+
+							},
+							failure : function(form, action) {
+
+								var formPanel = Ext.getCmp('book-form');
+
+								formPanel.el.unmask();
+
+								var result = action.result;
+
+								if (result.success) {           
+									Ext.MessageBox.alert('Success',action.result.msg);
+								} else {
+									Ext.MessageBox.alert('Failure',action.result.msg);
+								} 
+
+							}
+						}); 
+
+					}
+				},
+				{
+					text: 'Reset',
+					handler: function(btn, eventObj) {
+
+						Ext.getCmp('book-form').getForm().reset();
+
+					}
+				}
+			]
+		}; 
+
+         var myViewport = new Ext.Viewport({
+            id: 'myViewport',
+            layout: 'border',
+			items : [
+				{
+					id : 'panel1',
+					region: 'center',
+					title : 'Plain Panel',
+					html  : 'Panel with an xtype specified',
+					frame: true
+				},
+				{
+					id : 'panel2',
+					region: 'west',
+					title : 'Plain Panel',
+					//html  : 'Panel with an xtype specified',
+					width:400,
+					frame: true,
+					items: [
+						bookForm
+					]
+				}
+            ]
+         });
+
+         myViewport.show();
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

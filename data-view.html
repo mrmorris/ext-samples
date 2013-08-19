@@ -1,0 +1,138 @@
+<html>
+<head>
+   <title>Stores</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <style type="text/css">
+       .emplWrap {
+           border: 1px #999999 solid;
+           margin : 3px;
+           -moz-border-radius: 5px;
+           -webkit-border-radius: 5px;
+           background-color: #ffffcc;
+           padding-bottom: 3px;
+      }
+       .emplSelected {
+           border: 1px #66ff66 solid;
+           background-color: #ccffcc;
+           cursor: pointer;
+      }
+       .emplOver {
+           border: 1px #9999ff solid;
+           background-color: #ccccff;
+           cursor: pointer;
+      }
+       .emplName {
+           font-weight: bold;
+           margin-left: 5px;
+           font-size: 14px;
+           text-decoration: underline;
+           color: #333333;
+      }
+       .title {
+           margin-left: 5px;
+           font-weight: bold;
+   } </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      var employeeStoreProxy = new Ext.data.ScriptTagProxy({
+         url : 'http://extjsinaction.com/getEmployees.php'
+      });
+
+      var employeeDvStore = {
+         xtype : 'jsonstore',
+         root : 'records',
+         autoLoad : false,
+         storeId : 'employeeDv',
+         proxy : employeeStoreProxy, 
+         fields :[
+            { name : 'datehired', mapping : 'datehired' }, 
+            { name : 'department', mapping : 'department' }, 
+            {name: 'email', mapping : 'email' }, 
+            { name : 'firstname', mapping : 'firstname' },
+            {name: 'id', mapping: 'id'}, 
+            {name: 'lastname', mapping: 'lastname'},
+            {name: 'middle', mapping: 'middle'},
+            {name: 'title', mapping: 'title'}
+         ]
+      };
+
+      // DataView uses a template to display our data
+
+      var employeeDvTpl = new Ext.XTemplate(
+        '<tpl for=".">',
+         '<div class="emplWrap" id="employee_{id}">',
+                '<div class="emplName">{lastname}, {firstname} {title}</div>',
+                '<div>',
+                     '<span class="title">Department:</span>',
+                    '{department}',
+                 '</div>',
+                '<div>',
+                '<span class="title">Email:</span>',
+                '<a href="#">{email}</a>',
+                '</div>',
+            '</div>',
+        '</tpl>'
+      );
+
+      var employeeDv = new Ext.DataView({
+         tpl           : employeeDvTpl, // XTemplate to be used
+         store         : employeeDvStore, // store
+         singleSelect  : true,
+         itemSelector  : 'div.emplWrap',
+         selectedClass : 'emplSelected',
+         overClass     : 'emplOver',
+         style         : 'overflow:auto; background-color: #FFFFFF;' // for scrolling
+      });
+
+      Ext.onReady(function () {
+
+         new Ext.Viewport({
+            layout       : 'fit',
+            layoutConfig : {
+               align : 'stretch'
+            }, 
+            items : [
+               {
+                  title  : 'Employees',
+                  frame  : true,
+                  layout : 'fit',
+                  items  : employeeDv
+               } 
+            ]
+         });
+
+         Ext.StoreMgr.get('employeeDv').load({
+            params : {
+               start : 0,
+               limit : 50 
+            }
+         });
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

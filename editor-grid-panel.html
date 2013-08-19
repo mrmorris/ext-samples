@@ -1,0 +1,173 @@
+<html>
+<head>
+   <title>Stores</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      // field mappings
+      var recordFields = [
+         {name: 'id', mapping: 'id'},
+         {name: 'firstname', mapping: 'firstname'},
+         {name: 'lastname', mapping: 'lastname'},
+         {name: 'street', mapping: 'street'},
+         {name: 'city', mapping: 'city'},
+         {name: 'state', mapping: 'state'},
+         {name: 'zip', mapping: 'zip'},
+         {name: 'department', mapping: 'department'},
+         // this is for tracking new records. just a pattern...
+         {name: 'newRecordId', mapping: 'newRecordId'}
+      ];
+
+      // we expect to re-use this...
+      var remoteProxy = new Ext.data.ScriptTagProxy( {
+         url : 'http://extjsinaction.com/dataQuery.php'
+      });
+
+      var remoteJsonStore = new Ext.data.JsonStore({
+         fields        : recordFields,
+         proxy : remoteProxy,
+         idProperty: 'id', // ensures store tracks ids as defined by data
+         totalProperty : 'totalCount', // optional field for the "total" results, for pagination
+         root          : 'records', // important: the property where the data is found
+         id            : 'ourRemoteStore',
+         autoLoad      : false, // tell store NOT to auto-fetch upon initialization
+         remoteSort    : true // tell store NOt to sort locally, due to paginated results
+      });
+
+      // now you create the Field editors for the ColumnModel later on
+
+      // direct instantiate a TextField for re-use in the editor...
+      var textFieldEditor = new Ext.form.TextField();
+
+      // lazy load (config object) a Combobox field
+      var comboEditor = {
+         xtype         : 'combo',
+         triggerAction : 'all',
+         displayField  : 'state',
+         valueField    : 'state',
+         store         : {
+            xtype  : 'jsonstore',
+            root   : 'records',
+            fields : ['state'],
+            proxy  :  new Ext.data.ScriptTagProxy({
+               url :  'http://extjsinaction.com/getStates.php'
+            })
+         }
+      };
+
+      var numberFieldEditor = {
+         xtype     : 'numberfield',
+         minLength : 5,
+         maxLength : 5
+      };
+
+
+      // now for our column model, mapping fields (in the store) to columns
+      // it is here we define the editors...
+      var columnModel = [
+         {
+            header    : 'Last Name',
+            dataIndex : 'lastname',
+            sortable  : true,
+            editor: textFieldEditor
+         },
+         {
+            header : 'First Name', 
+            dataIndex : 'firstname', 
+            sortable : true,
+            editor: textFieldEditor
+         },
+         {
+            header    : 'Street Address',
+            dataIndex : 'street',
+            sortable  : true,
+            editor: textFieldEditor
+         },
+         {
+            header    : 'City',
+            dataIndex : 'city',
+            sortable  : true,
+            editor: textFieldEditor
+         },
+         {
+            header    : 'State',
+            dataIndex : 'state',
+            sortable  : true,
+            editor: comboEditor
+         },
+         {
+            header    : 'Zip',
+            dataIndex : 'zipcode',
+            sortable  : true,
+            editor: numberFieldEditor
+         }
+      ];
+
+      // paging toolbar for pagination, as an Xtype config object
+      var pagingToolbar = {
+         xtype       : 'paging',
+         store       : remoteJsonStore,
+         pageSize    : 50, // will use this and the "totalCount" property from server to set up pagination counts
+         displayInfo : true // display current page + total pages
+      };
+
+      // the Grid!
+      var grid = {
+         xtype            : 'editorgrid', // EditorGridPanel xtype
+         id               : 'myEditorGrid',
+         columns          : columnModel,
+         store            : remoteJsonStore,
+         loadMask         : true, // auto mask when loading and paginating
+         bbar             : pagingToolbar,
+         stripRows: true,
+         viewConfig: {
+            forceFit: true
+         }
+      };
+
+      Ext.onReady(function () {
+
+         // now a container for our grid!
+         new Ext.Window({
+            height : 350,
+            width  : 550,
+            border : false,
+            layout : 'fit',
+            items  : grid
+         }).show();
+
+         // and we should tell the Store to load up since we disabled auto loading
+         Ext.StoreMgr.get('ourRemoteStore').load({
+            params : {
+               start : 0,
+               limit : 50 
+            }
+         });
+
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

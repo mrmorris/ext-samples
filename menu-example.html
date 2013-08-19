@@ -1,0 +1,189 @@
+<html>
+<head>
+   <title>Stores</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <link rel="stylesheet" type="text/css" href="icons/icons.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      var genericHandler = function(menuItem, eventObj) {
+         Ext.MessageBox.alert('', 'Your choice is ' + menuItem.text);
+      }
+
+      // default xtype for Menu is going to be "menuitem"
+      var menuItems = [
+         {
+            text    : 'Add Item',
+            handler : genericHandler
+         },
+         {
+            text    : 'Search',
+            handler : genericHandler
+         },
+         /* You also have two special menus... Color and Date
+         {
+            text : 'Choose Color', 
+            iconCls : 'icon-color_swatch', 
+            menu : {
+               xtype   : 'colormenu',
+               colors : ['FF0000', '00FF00', '0000FF'],
+               handler : function(picker, choice) {
+                  Ext.MessageBox.alert('', 'Your choice is ' + choice);
+               }
+            }
+         },
+         var dateMenuItem = {
+            text    : 'Choose Date',
+            iconCls : 'icon-calendar',
+            menu :{
+               xtype : 'datemenu', 
+               handler : function(picker, choice) {
+                  Ext.MessageBox.alert('', 'Your choice is ' + choice);
+               }
+            } 
+         }, // */
+         "-", // special Separator              
+         {
+            text: 'New Department',
+            iconCls: 'icon-group_add',
+            menu: [
+               {
+                  text: 'Management',
+                  iconCls: 'icon-user_green',
+                  handler: genericHandler
+               },
+               {
+                  text: 'Accounting',
+                  iconCls: 'icon-user_brown',
+                  handler: genericHandler
+               }
+            ]
+         }
+      ];
+
+      var menu = new Ext.menu.Menu({
+         items     : menuItems,
+         listeners : {
+            beforehide : function() {
+               // this just disables the event, preventing the menu from hiding
+               return false;
+            }
+         }
+      });
+
+
+      Ext.onReady(function () {
+
+         //menu.showAt([100, 100]);
+
+         // buttons
+
+         /*
+         new Ext.Button({ 
+            renderTo : Ext.getBody(),
+            text : 'Plain Button',
+            iconCls : 'icon-control_power',
+            handler  : function (btn) {
+               btn.el.frame();
+            }
+         });
+         // */
+
+         new Ext.ButtonGroup({
+            renderTo : Ext.getBody(),
+            title: 'Manage Emails',
+            items: [
+               {
+                  text: 'Pase as',
+                  iconCls: 'icon-clipboard',
+                  menu: [
+                     {
+                         text: 'Plain Text',
+                        iconCls: 'icon-paste_plain'
+                     },
+                     {
+                        text: 'Word',
+                        iconCls: 'icon-paste_word'
+                     }
+                  ]
+               },
+               {
+                  text: 'Copy',
+                  iconCls: 'icon-page_white_copy'
+               },
+               {
+                  text: 'Cut',
+                  iconCls: 'icon-cut'
+               },
+               {
+                  text: 'Clear',
+                  iconCls: 'icon-erase'
+               }
+            ]
+         });
+
+         // Toolbar
+
+         /*
+         new Ext.Window({
+            width: 500,
+            height: 200,
+            tbar: {
+               // default xtype for toolbar items is "button"
+               items: [
+                  {
+                     text: 'Add',
+                     iconCls: 'icon-add'
+                  },
+                  '-',
+                  {
+                     text: 'Update',
+                     iconCls: 'icon-update'
+                  },
+                  '-',
+                  {
+                     text: 'Delete',
+                     iconCls: 'icon-delete'
+                  },
+                  '->',
+                  'Select one of these:',
+                  {
+                     xtype : 'combo', 
+                     width : 100, 
+                     store :[
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday'
+                     ]
+                  }
+               ]
+            }
+         }).show();
+         // */
+      });
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>

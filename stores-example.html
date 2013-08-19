@@ -35,10 +35,11 @@
 
       // create a new Record Constructor "myRecord"
       // not the same as "new Record"
+      // acts as a template for mapping your data fields 
       var myRecord = Ext.data.Record.create([
-         {
-            name: 'name',
-            mapping: 1
+         { // each of these object literals are "Ext.data.Field" configs
+            name: 'name', // field name
+            mapping: 1 // maps to first value in the data array
          },
          {
             name: 'state',
@@ -51,6 +52,7 @@
       // the reader will make a new instance of "myRecord" for each Record in the data
       var arrayReader = new Ext.data.ArrayReader({}, myRecord);
 
+      // the proxy here is what will load your unformatted data from memory
       var memoryProxy = new Ext.data.MemoryProxy(arrayData);
 
       var myStore = new Ext.data.Store({
@@ -64,8 +66,15 @@
          fields: ['name', 'state']
       });
 
+      // "fields" is as the ArrayStore expects. This is also valid for array store:
+      var myStore = new Ext.data.ArrayStore({
+         data: arrayData,
+         fields : [ 'name', { name : 'state', mapping : 2} ]
+      });
+
       Ext.onReady(function () {
         
+         console.log(myStore);
 
       });
 

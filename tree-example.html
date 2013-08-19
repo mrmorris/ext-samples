@@ -1,0 +1,180 @@
+<html>
+<head>
+   <title>Stores</title>
+
+   <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+   <style>
+
+      body{
+         background-color:#aeaeae;
+      }
+
+      #container{
+         background-color:#ccc;
+      }
+   </style>
+
+   <style type="text/css">
+       .emplWrap {
+           border: 1px #999999 solid;
+           margin : 3px;
+           -moz-border-radius: 5px;
+           -webkit-border-radius: 5px;
+           background-color: #ffffcc;
+           padding-bottom: 3px;
+      }
+       .emplSelected {
+           border: 1px #66ff66 solid;
+           background-color: #ccffcc;
+           cursor: pointer;
+      }
+       .emplOver {
+           border: 1px #9999ff solid;
+           background-color: #ccccff;
+           cursor: pointer;
+      }
+       .emplName {
+           font-weight: bold;
+           margin-left: 5px;
+           font-size: 14px;
+           text-decoration: underline;
+           color: #333333;
+      }
+       .title {
+           margin-left: 5px;
+           font-weight: bold;
+   } </style>
+
+   <script src="extjs/adapter/ext/ext-base.js"></script>
+
+   <script src="extjs/ext-all-debug.js"></script>
+
+   <script>
+
+      Ext.BLANK_IMAGE_URL = 'extjs/resources/images/default/s.gif';
+
+      var rootNode = {
+         text     : 'Root Node',
+         expanded : true, // expands node immediately
+         children : [
+            {
+               text : 'Child 1',
+               leaf : true // endpoint, changes UI behavior
+            },
+            {
+               text: 'Child 2',
+               leaf: true
+            },
+            {
+               text: 'Child 3',
+               children: [
+                  {
+                     text: 'Grand child 1',
+                     children: [
+                        {
+                           text: 'Grand grand child',
+                           leaf: true
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      };
+
+      Ext.onReady(function () {
+
+         new Ext.Window({
+            height     : 200,
+            width      : 200,
+            layout     : 'fit',
+            border     : false,
+            title      : 'Our first tree',
+            items      : {
+               xtype: 'treepanel',
+               id: 'treepanel',
+               autoScroll: true,
+               root: rootNode,
+               listeners: {
+                  contextmenu: onCtxMenu
+               }
+            }
+         }).show();
+
+      });
+
+      var buildCtxMenu = function() {
+         return new Ext.menu.Menu({
+            items: [ 
+               {
+                  itemId: 'add', // similar to component id except local to Component Container and not in ComponentMgr
+                  handler : Ext.emptyFn
+               },
+               {
+                  itemId  : 'edit',
+                  handler : Ext.emptyFn,
+                  scope   : Ext.emptyFn
+               }, 
+               {
+                  itemId: 'delete',
+                  handler : Ext.emptyFn
+               }
+            ]
+         });
+      };
+
+      var onCtxMenu = function(node, evtObj) {
+
+         node.select();
+
+         evtObj.stopEvent();
+
+         if (! this.ctxMenu) {
+            this.ctxMenu = buildCtxMenu();
+         }
+
+         var ctxMenu = this.ctxMenu;
+         var addItem = ctxMenu.getComponent('add');
+         var editItem = ctxMenu.getComponent('edit');
+         var deleteItem = ctxMenu.getComponent('delete');
+
+         if (node.id =='myCompany') {
+
+            addItem.setText('Add Department');
+            editItem.setText('Nope, not changing the name');
+            deleteItem.setTex('Can\'t delete a company, silly');
+            addItem.enable();
+            deleteItem.disable();
+            editItem.disable();
+
+         } else if (! node.leaf) {
+
+            addItem.setText('Add Employee');
+            deleteItem.setText('Delete Department');
+            editItem.setText('Edit Department');
+            addItem.enable();
+            editItem.enable();
+            deleteItem.enable();
+
+         } else {
+
+            addItem.setText('Can\'t Add Employee');
+            editItem.setText('Edit Employee');
+            deleteItem.setText('Delete Employee');
+            addItem.disable();
+            editItem.enable();
+            deleteItem.enable();
+
+         }
+
+         ctxMenu.showAt(evtObj.getXY());
+
+      };
+
+   </script>
+</head>
+<body>
+   <div id="container"></div>
+</body>
+</html>
